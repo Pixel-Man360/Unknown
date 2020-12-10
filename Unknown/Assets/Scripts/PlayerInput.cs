@@ -6,12 +6,9 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     public static event Action<bool> OnRightKeyPressed;
-    public static event Action<bool> OnRightKeyNotPressed;
-
     public static event Action<bool> OnLeftKeyPressed;
-    public static event Action<bool> OnLeftKeyNotPressed;
-
-    public static event Action OnJumpKeyPressed;
+    public static event Action<bool> OnJumpKeyPressed;
+    //public static event Action<bool> OnJumpKeyNotPressed;
 
 
     void Update()
@@ -19,16 +16,23 @@ public class PlayerInput : MonoBehaviour
         if((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && OnRightKeyPressed != null)
            OnRightKeyPressed(true);
 
-        if((Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow)) && OnRightKeyNotPressed != null)
-           OnRightKeyNotPressed(false);
+        if((Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow)) && OnRightKeyPressed != null)
+           OnRightKeyPressed(false);
 
         if((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && OnLeftKeyPressed != null)
            OnLeftKeyPressed(true);
 
-        if((Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow)) && OnLeftKeyNotPressed != null)
-           OnLeftKeyNotPressed(false);
+        if((Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow)) && OnLeftKeyPressed != null)
+           OnLeftKeyPressed(false);
 
-        if(Input.GetKeyDown(KeyCode.Space) && OnJumpKeyPressed != null)
-           OnJumpKeyPressed();
+
+         bool jump = Input.GetKey(KeyCode.Space);
+        if(OnJumpKeyPressed != null)
+           OnJumpKeyPressed(jump);
+
+      //  if(Input.GetKeyUp(KeyCode.Space) && OnJumpKeyNotPressed != null)
+         // OnJumpKeyNotPressed(false);
+
+        
     }
 }

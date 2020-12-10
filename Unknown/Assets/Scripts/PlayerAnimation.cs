@@ -7,6 +7,8 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
 {
 
+   
+    [Header("Animation Speed")]
     [SerializeField] float acceleration= 0.1f;
     [SerializeField] float deceleration= 0.5f;
     
@@ -14,6 +16,7 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
     private bool isRightPressed;
     private bool isLeftPressed;
     
+    private bool isJumpPressed;
     private float movingSpeed = 0f;
     void Start()
     {
@@ -23,19 +26,17 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
     private void OnEnable() 
     {
         PlayerInput.OnRightKeyPressed += IsRightPressed;
-        PlayerInput.OnRightKeyNotPressed += IsRightPressed;
 
         PlayerInput.OnLeftKeyPressed += IsLeftPressed;
-        PlayerInput.OnLeftKeyNotPressed += IsLeftPressed;
+     
     }
 
     void OnDisable() 
     {
         PlayerInput.OnRightKeyPressed -= IsRightPressed;
-        PlayerInput.OnRightKeyNotPressed -= IsRightPressed;
 
         PlayerInput.OnLeftKeyPressed -= IsLeftPressed;
-        PlayerInput.OnLeftKeyNotPressed -= IsLeftPressed;
+        
     }
 
     void Update()
@@ -47,7 +48,7 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
 
     public void IsLeftPressed(bool isPressed) => isLeftPressed = isPressed;
 
-    
+    void IsJumpPressed(bool isPressed) => isJumpPressed = isPressed;
     void MovementAnimation()
     {
         

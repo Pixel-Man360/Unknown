@@ -5,5 +5,6 @@ using UnityEngine;
 public interface ButtonPressedChecker 
 {
     void IsLeftPressed(bool isPressed);
-     void IsRightPressed(bool isPressed);
+    void IsRightPressed(bool isPressed);
+    
 }

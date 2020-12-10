@@ -12,19 +12,15 @@ public class PlayerRotation : MonoBehaviour, ButtonPressedChecker
     void OnEnable() 
     {
         PlayerInput.OnRightKeyPressed += IsRightPressed;
-        PlayerInput.OnRightKeyNotPressed += IsRightPressed;
 
         PlayerInput.OnLeftKeyPressed += IsLeftPressed;
-        PlayerInput.OnLeftKeyNotPressed += IsLeftPressed;
     }
 
     void OnDisable() 
     {
          PlayerInput.OnRightKeyPressed -= IsRightPressed;
-         PlayerInput.OnRightKeyNotPressed -= IsRightPressed;
 
          PlayerInput.OnLeftKeyPressed -= IsLeftPressed;
-         PlayerInput.OnLeftKeyNotPressed -= IsLeftPressed;
     }
 
     void Update()
