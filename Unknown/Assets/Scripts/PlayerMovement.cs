@@ -12,20 +12,20 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
     [SerializeField] private float speedIncreasingThreshold = 0.5f;
 
     [Space(20)]
+
     [Header("Character Jump Modifiers")]
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float fallingSpeed = 2.5f;
     
     [Space(20)]
-    [Header("Layers to ignore for ground checking and player collider for the measurement")]
 
-    [SerializeField] private LayerMask ignoreLayers;
-    [SerializeField] private Collider collider; 
+    [Header("Collider for the measurement of ground check")]
+    [SerializeField] private Collider collider3d; 
     private float tempSpeed;
     private bool isRightPressed = false;
     private bool isLeftPressed = false;
     private bool isJumpPressed = false;
-    [SerializeField] private bool isHit;
+    private bool isHit;
     private bool isGrounded;
     private Rigidbody rb;
     private RaycastHit hit;
@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
     void Start()
     {
        rb = GetComponent<Rigidbody>();   
-
+       collider3d = GetComponent<Collider>();
        
        tempSpeed = initialSpeed; 
     }
@@ -57,16 +57,13 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
          PlayerInput.OnJumpKeyPressed -= IsJumpPressed;
        
     }
-    void Update() 
-    {
-        isGrounded = IsGrounded();
-        Debug.Log(rb.velocity.y);
-    }
+    
     void FixedUpdate() 
     {
         Move();         
         Jump();
         Gravity();
+        isGrounded = IsGrounded();
     }
 
    public void IsRightPressed(bool isPressed) => isRightPressed = isPressed;
@@ -121,10 +118,10 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
         float maxDistance = 1.2f;
         
 
-        //isHit = Physics.BoxCast(collider.bounds.center, transform.localScale, Vector3.down, out hit, transform.rotation, maxDistance, ignoreLayers);
+        //isHit = Physics.BoxCast(collider.bounds.center, transform.localScale, Vector3.down, out hit, transform.rotation, maxDistance);
         //isHit = Physics.BoxCast(collider.bounds.center, transform.localScale, Vector3.down, out hit, Quaternion.identity, maxDistance, ignoreLayers);
-        isHit = Physics.Raycast(collider.bounds.center, Vector3.down, out hit, maxDistance, ignoreLayers);
-        Debug.DrawRay(collider.bounds.center, Vector2.down* maxDistance, Color.red);
+        isHit = Physics.Raycast(collider3d.bounds.center, Vector3.down, out hit, maxDistance);
+        Debug.DrawRay(collider3d.bounds.center, Vector2.down* maxDistance, Color.red);
         if(isHit)
           return true;
 
@@ -132,7 +129,7 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
            return false;
     }
 
-    void OnDrawGizmos() 
+   /* void OnDrawGizmos() 
     {
         if(isHit)
         {
@@ -150,7 +147,7 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
 
         }
         
-    }
+    } */
 
     void Gravity()
     {

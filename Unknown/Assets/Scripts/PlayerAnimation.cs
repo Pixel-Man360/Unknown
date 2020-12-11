@@ -28,6 +28,8 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
         PlayerInput.OnRightKeyPressed += IsRightPressed;
 
         PlayerInput.OnLeftKeyPressed += IsLeftPressed;
+
+        PlayerInput.OnJumpKeyPressed += IsJumpPressed;
      
     }
 
@@ -36,12 +38,15 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
         PlayerInput.OnRightKeyPressed -= IsRightPressed;
 
         PlayerInput.OnLeftKeyPressed -= IsLeftPressed;
+
+        PlayerInput.OnJumpKeyPressed -= IsJumpPressed;
         
     }
 
     void Update()
     {
-        MovementAnimation();
+      MovementAnimation();
+      JumpAnimation();
     }
 
     public void IsRightPressed(bool isPressed) => isRightPressed = isPressed;
@@ -50,9 +55,8 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
 
     void IsJumpPressed(bool isPressed) => isJumpPressed = isPressed;
     void MovementAnimation()
-    {
-        
-        
+    {  
+
           if((isRightPressed || isLeftPressed) && movingSpeed < 1.0f)
           { 
             movingSpeed += Time.deltaTime * acceleration;
@@ -77,4 +81,21 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
           }
         
     }
+
+    void JumpAnimation()
+    {
+      if(isJumpPressed)
+      {
+        animator.Play("Jump Up");
+        StartCoroutine("ResetJumpAnimation");
+      }
+
+    }
+
+    IEnumerator ResetJumpAnimation()
+    {
+      yield return new WaitForSeconds(2f);
+      animator.Play("Movement");
+    }
+
 }
