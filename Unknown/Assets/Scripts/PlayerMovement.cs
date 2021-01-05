@@ -113,9 +113,9 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
         }
     }
 
-    bool IsGrounded()
+    public bool IsGrounded()
     {
-        float maxDistance = 1.2f;
+        float maxDistance = 1f;
         
 
         //isHit = Physics.BoxCast(collider.bounds.center, transform.localScale, Vector3.down, out hit, transform.rotation, maxDistance);
@@ -151,6 +151,7 @@ public class PlayerMovement : MonoBehaviour, ButtonPressedChecker
 
     void Gravity()
     {
+        Debug.Log(rb.velocity.y);
       if(rb.velocity.y < 0)
       {
           rb.velocity += new Vector3(0,(Physics.gravity.y * ( fallingSpeed - 1) * Time.fixedDeltaTime), 0f );

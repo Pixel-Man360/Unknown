@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerRotation : MonoBehaviour, ButtonPressedChecker  
 {
-    [SerializeField][Range(0.1f, 5f)] private float rotationSpeed;
+    [SerializeField] private float rotationSpeed;
 
     private bool isRightPressed = false;
     private bool isLeftPressed = false;

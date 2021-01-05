@@ -11,16 +11,21 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
     [Header("Animation Speed")]
     [SerializeField] float acceleration= 0.1f;
     [SerializeField] float deceleration= 0.5f;
-    
+    [SerializeField] float jumpAnimTransitionTime = 0.8f;
     private Animator animator;
     private bool isRightPressed;
     private bool isLeftPressed;
     
     private bool isJumpPressed;
     private float movingSpeed = 0f;
+
+    private PlayerMovement playerMovement;
+    private Rigidbody rigidbody;
     void Start()
     {
         animator = GetComponent<Animator>();
+        playerMovement = GetComponent<PlayerMovement>();
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable() 
@@ -45,8 +50,11 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
 
     void Update()
     {
+      
       MovementAnimation();
-      JumpAnimation();
+      JumpUpAnimation();
+      JumpDownAnimation();
+      
     }
 
     public void IsRightPressed(bool isPressed) => isRightPressed = isPressed;
@@ -55,13 +63,18 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
 
     void IsJumpPressed(bool isPressed) => isJumpPressed = isPressed;
     void MovementAnimation()
-    {  
+    { 
+       
+      
+       if(playerMovement.IsGrounded())
+         {
 
-          if((isRightPressed || isLeftPressed) && movingSpeed < 1.0f)
-          { 
+           animator.Play("Movement");
+           if((isRightPressed || isLeftPressed) && movingSpeed < 1.0f)
+           { 
             movingSpeed += Time.deltaTime * acceleration;
             animator.SetFloat("Velocity", movingSpeed );
-          }
+           }
 
           else if(!isRightPressed && !isLeftPressed && movingSpeed > 0.0f)
           {
@@ -70,21 +83,26 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
           }
 
           
-        if((isRightPressed || isLeftPressed) && movingSpeed > 1.0f)
-          { 
-            movingSpeed = 1;
-          }
+          if((isRightPressed || isLeftPressed) && movingSpeed > 1.0f)
+           { 
+             movingSpeed = 1;
+           }
 
           else if(!isRightPressed && !isLeftPressed && movingSpeed < 0.0f)
-          {
+           {
             movingSpeed = 0;
-          }
+            
+           }
         
+
+         }
+
+          
     }
 
-    void JumpAnimation()
+    void JumpUpAnimation()
     {
-      if(isJumpPressed)
+      if(isJumpPressed && playerMovement.IsGrounded() && animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Down") == false)
       {
         animator.Play("Jump Up");
         StartCoroutine("ResetJumpAnimation");
@@ -92,10 +110,23 @@ public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
 
     }
 
+    void JumpDownAnimation()
+    {
+      if(playerMovement.IsGrounded() == false && animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Up") == false)
+      {
+        animator.Play("Jump Down");
+      }
+    }
+
     IEnumerator ResetJumpAnimation()
     {
-      yield return new WaitForSeconds(2f);
-      animator.Play("Movement");
-    }
+      yield return new WaitForSeconds(jumpAnimTransitionTime);
+      animator.Play("Jump Down");
+    } 
+
+
+   
+      
+    
 
 }

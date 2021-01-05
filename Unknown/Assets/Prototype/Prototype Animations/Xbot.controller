@@ -1,5 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1102 &-1122868342818550656
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Jump Down
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 43ef626b1c1cfd74a9aaa31495ad82ac, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!206 &-1043521402476673354
 BlendTree:
   m_ObjectHideFlags: 1
@@ -32,7 +58,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Base Layer
+    m_Name: Prototype
     m_StateMachine: {fileID: 4628817272481459184}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -128,7 +154,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 389e1b0b1a12a7841a33844021363caa, type: 2}
+  m_Motion: {fileID: 7400000, guid: dc955c391922e3f4cbc21cb663fdd6a2, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -141,7 +167,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: Prototype
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1099447987505280753}
@@ -149,6 +175,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 3604841530435958471}
     m_Position: {x: 40, y: 0, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -1122868342818550656}
+    m_Position: {x: 50, y: 70, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
