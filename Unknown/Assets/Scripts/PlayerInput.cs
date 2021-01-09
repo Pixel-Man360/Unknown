@@ -8,7 +8,7 @@ public class PlayerInput : MonoBehaviour
     public static event Action<bool> OnRightKeyPressed;
     public static event Action<bool> OnLeftKeyPressed;
     public static event Action<bool> OnJumpKeyPressed;
-    //public static event Action<bool> OnJumpKeyNotPressed;
+    
 
 
     void Update()
@@ -29,10 +29,6 @@ public class PlayerInput : MonoBehaviour
          bool jump = Input.GetKey(KeyCode.Space);
         if(OnJumpKeyPressed != null)
            OnJumpKeyPressed(jump);
-
-      //  if(Input.GetKeyUp(KeyCode.Space) && OnJumpKeyNotPressed != null)
-         // OnJumpKeyNotPressed(false);
-
-        
+  
     }
 }
