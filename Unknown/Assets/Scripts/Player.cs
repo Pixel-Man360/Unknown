@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimation ))]
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerRotation))]
+
 public class Player : MonoBehaviour, ButtonPressedChecker
 {
     [SerializeField] private PlayerAnimation playerAnimation;
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour, ButtonPressedChecker
     private bool isLeftPressed = false;
     private bool isJumpPressed = false;
     private bool isGrounded = false;
-    
+    private bool isDead = false;
 
     
     #region Assignment or calling methods
@@ -63,35 +64,44 @@ public class Player : MonoBehaviour, ButtonPressedChecker
     {
         isGrounded = playerMovement.IsGrounded();
 
+        if(!isDead)
+        {
+          Move();
+          Jump();
+          Rotation();
+          AnimateRunning();
+          AnimateJump();
+          AnimateFalling();
+        }
 
-        Move();
-        Jump();
         Gravity();
-        Rotation();
+        
     }
 
     #endregion
 
-    
-    
 
-    #region Movement Logic
+    #region Movement Controller
     void Move()
     {
-        if(isRightPressed)
+        if(isGrounded)
         {
-            playerMovement.MoveRight();
-        }
+            if(isRightPressed)
+            {
+              playerMovement.MoveRight();
+            }
 
-        else if(isLeftPressed)
-        {
-            playerMovement.MoveLeft();
-        }
+            else if(isLeftPressed)
+            {
+              playerMovement.MoveLeft();
+            }
 
-        else if(!isLeftPressed && !isRightPressed)
-        {
-            playerMovement.Stop();
+            else if(!isLeftPressed && !isRightPressed)
+            {
+              playerMovement.Stop();
+            }
         }
+        
     }
 
     void Jump()
@@ -99,6 +109,10 @@ public class Player : MonoBehaviour, ButtonPressedChecker
         if(isJumpPressed && isGrounded)
         {
             playerMovement.Jump();
+            if(playerAnimation.animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Down") == false)
+            {
+               playerAnimation.JumpUpAnimation();
+            }
         }
     }
 
@@ -112,22 +126,74 @@ public class Player : MonoBehaviour, ButtonPressedChecker
 
     void Rotation()
     {
-        if(isRightPressed)
-        {
+      if(isGrounded)
+      {
+         if(isRightPressed)
+         {
             playerRotation.RotateRight();
-        }
+         }
 
-        else if(isLeftPressed)
-        {
+         else if(isLeftPressed)
+         {
             playerRotation.RotateLeft();
-        }
+         }
+      }
+        
     }
 
 
     #endregion
  
- 
 
-    ///////////// Movement Animation ///////////////
-   
+   #region Movement Animation Controller
+    
+    void AnimateRunning()
+    {
+        
+       if(playerMovement.IsGrounded())
+         {
+
+           playerAnimation.Idle();
+
+           if((isRightPressed || isLeftPressed) && playerAnimation.movingSpeed < 1.0f)
+           { 
+             playerAnimation.MovementButtonPressed();
+           }
+
+          else if(!isRightPressed && !isLeftPressed && playerAnimation.movingSpeed > 0.0f)
+          {
+            playerAnimation.MovementButtonNotPressed();
+          }
+
+          
+          if((isRightPressed || isLeftPressed) && playerAnimation.movingSpeed > 1.0f)
+           { 
+             playerAnimation.ResetMovingAnimationSpeed(1);
+           }
+
+          else if(!isRightPressed && !isLeftPressed && playerAnimation.movingSpeed < 0.0f)
+           {
+            playerAnimation.ResetMovingAnimationSpeed(0);
+           }
+
+         }
+    }
+
+
+    void AnimateJump()
+    {
+        if(isJumpPressed && isGrounded && playerAnimation.animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Down") == false)
+        {
+            playerAnimation.JumpUpAnimation();
+        }
+    }
+
+    void AnimateFalling()
+    {
+        if(playerMovement.IsGrounded() == false && playerAnimation.animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Up") == false)
+        {
+          playerAnimation.FallingAnimation();
+        }
+    }
+   #endregion
 }

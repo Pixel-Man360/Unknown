@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [Space(20)]
 
     [Header("Character Jump Modifiers")]
-    [SerializeField] private float jumpSpeed;
+    [SerializeField] private float jumpHeight;
     [SerializeField] private float fallingSpeed = 2.5f;
     
     [Space(20)]
@@ -22,22 +22,28 @@ public class PlayerMovement : MonoBehaviour
     [Header("Collider for the measurement of ground check")]
     [SerializeField] private Collider collider3d; 
 
+    [Space(20)]
+    [Header("Layers for ground checking")]
+
+    [SerializeField] private LayerMask layerMask;
+
     private float tempSpeed;
     private bool isHit;
     private bool isGrounded;
     private Rigidbody rb;
     private RaycastHit hit;
+
+    private Player playerController;
     
     void Start()
     {
        rb = GetComponent<Rigidbody>();   
        collider3d = GetComponent<Collider>();
+       playerController = GetComponent<Player>();
        
        tempSpeed = initialSpeed; 
     }
    
-
-    
 
     public void MoveLeft()
     {
@@ -75,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
     public void Jump()
     {
 
-       rb.velocity = new Vector3(rb.velocity.x, jumpSpeed * Time.fixedDeltaTime, 0);
+       rb.velocity = new Vector3(rb.velocity.x, jumpHeight * Time.fixedDeltaTime, 0);
   
     }
 
@@ -83,7 +89,8 @@ public class PlayerMovement : MonoBehaviour
     {
         float maxDistance = 1f;
         
-        isHit = Physics.Raycast(collider3d.bounds.center, Vector3.down, out hit, maxDistance);
+        isHit = Physics.Raycast(collider3d.bounds.center, Vector3.down, out hit, maxDistance,layerMask);
+
         Debug.DrawRay(collider3d.bounds.center, Vector2.down* maxDistance, Color.red);
         if(isHit)
           return true;

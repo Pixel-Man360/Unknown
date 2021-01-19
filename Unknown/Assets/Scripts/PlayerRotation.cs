@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerRotation : MonoBehaviour 
 {
     [SerializeField] private float rotationSpeed;
+    
 
     public void RotateRight()
     {   

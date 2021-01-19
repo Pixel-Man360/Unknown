@@ -4,118 +4,63 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Animator))]
-public class PlayerAnimation : MonoBehaviour, ButtonPressedChecker
+public class PlayerAnimation : MonoBehaviour
 {
 
    
     [Header("Animation Speed")]
-    [SerializeField] float acceleration= 0.1f;
-    [SerializeField] float deceleration= 0.5f;
+    [SerializeField] internal float acceleration= 0.1f;
+    [SerializeField] internal float deceleration= 0.5f;
     [SerializeField] float jumpAnimTransitionTime = 0.8f;
-    private Animator animator;
+
+    internal Animator animator;
     private bool isRightPressed;
     private bool isLeftPressed;
     
     private bool isJumpPressed;
-    private float movingSpeed = 0f;
+    internal float movingSpeed = 0f;
 
     private PlayerMovement playerMovement;
-    private Rigidbody rigidbody;
+    private Rigidbody rigidBody;
+    private Player playerController;
     void Start()
     {
         animator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
-        rigidbody = GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
+        playerController = GetComponent<Player>();
     }
 
-    private void OnEnable() 
+    internal void Idle()
     {
-        PlayerInput.OnRightKeyPressed += IsRightPressed;
-
-        PlayerInput.OnLeftKeyPressed += IsLeftPressed;
-
-        PlayerInput.OnJumpKeyPressed += IsJumpPressed;
-     
+      animator.Play("Movement");
     }
-
-    void OnDisable() 
-    {
-        PlayerInput.OnRightKeyPressed -= IsRightPressed;
-
-        PlayerInput.OnLeftKeyPressed -= IsLeftPressed;
-
-        PlayerInput.OnJumpKeyPressed -= IsJumpPressed;
-        
-    }
-
-    void Update()
-    {
-      
-      MovementAnimation();
-      JumpUpAnimation();
-      JumpDownAnimation();
-      
-    }
-
-    public void IsRightPressed(bool isPressed) => isRightPressed = isPressed;
-
-    public void IsLeftPressed(bool isPressed) => isLeftPressed = isPressed;
-
-    void IsJumpPressed(bool isPressed) => isJumpPressed = isPressed;
-    void MovementAnimation()
+    internal void MovementButtonPressed()
     { 
-       
-      
-       if(playerMovement.IsGrounded())
-         {
-
-           animator.Play("Movement");
-           if((isRightPressed || isLeftPressed) && movingSpeed < 1.0f)
-           { 
-            movingSpeed += Time.deltaTime * acceleration;
-            animator.SetFloat("Velocity", movingSpeed );
-           }
-
-          else if(!isRightPressed && !isLeftPressed && movingSpeed > 0.0f)
-          {
-            movingSpeed -= Time.deltaTime * deceleration;
-            animator.SetFloat("Velocity", movingSpeed); 
-          }
-
-          
-          if((isRightPressed || isLeftPressed) && movingSpeed > 1.0f)
-           { 
-             movingSpeed = 1;
-           }
-
-          else if(!isRightPressed && !isLeftPressed && movingSpeed < 0.0f)
-           {
-            movingSpeed = 0;
-            
-           }
-        
-
-         }
-
-          
+       movingSpeed += Time.deltaTime * acceleration;
+       animator.SetFloat("Velocity", movingSpeed );  
     }
 
-    void JumpUpAnimation()
+    internal void MovementButtonNotPressed()
     {
-      if(isJumpPressed && playerMovement.IsGrounded() && animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Down") == false)
-      {
+       movingSpeed -= Time.deltaTime * deceleration;
+       animator.SetFloat("Velocity", movingSpeed); 
+    }
+
+    internal void ResetMovingAnimationSpeed(int speed)
+    {
+      movingSpeed = speed;
+    }
+
+    internal void JumpUpAnimation()
+    {
         animator.Play("Jump Up");
         StartCoroutine("ResetJumpAnimation");
-      }
-
     }
 
-    void JumpDownAnimation()
+    internal void FallingAnimation()
     {
-      if(playerMovement.IsGrounded() == false && animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Up") == false)
-      {
         animator.Play("Jump Down");
-      }
     }
 
     IEnumerator ResetJumpAnimation()
