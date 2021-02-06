@@ -122,12 +122,13 @@ public class PlayerMovement : MonoBehaviour
     public void Gravity()
     {
         Debug.Log(rb.velocity.y);
-
-        rb.velocity += new Vector3(0,(Physics.gravity.y * ( fallingSpeed - 1) * Time.fixedDeltaTime), 0f );  
+        
+        if(rb.velocity.y < 0)
+        {
+            rb.velocity += new Vector3(0,(Physics.gravity.y * ( fallingSpeed - 1) * Time.fixedDeltaTime), 0f );  
+        }
+       
     }
 
-    public float GetYVelocity()
-    {
-        return rb.velocity.y;
-    }
+    
 }

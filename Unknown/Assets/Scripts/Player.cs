@@ -118,10 +118,7 @@ public class Player : MonoBehaviour, ButtonPressedChecker
 
     void Gravity()
     {
-        if(playerMovement.GetYVelocity() < 0)
-        {
-            playerMovement.Gravity();
-        }
+      playerMovement.Gravity(); 
     }
 
     void Rotation()
